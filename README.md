@@ -18,17 +18,18 @@ Inline image expansion from your location on the page (or the whole page)
 Simply copy the code from main.js and paste it into [options]>Custom Js
 
  
- [CHANGELOG]
- V 0.13
+## [CHANGELOG]
+#### V 0.13
  - fixed many bugs
  - added update checker
  - Add sort by image in catalog mode
  - Add sort by image in catalog mode
  - added settings menu
  - saved settings and position in variables
- V 0.12A
+ #### V 0.12A
  - Added sort by image count in gallery mode
- [TODO] 
+
+## [TODO] 
  - finish auto update/update checker
  - fix scrolling page to match gallery with expanded images
  - account for auto update images
