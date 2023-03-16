@@ -1,4 +1,4 @@
- # GX PATCHER VERSION [0.13] -- Slightly Less Jank Edition
+# ![logo](./res/bandaid.svg) GX PATCHER VERSION [0.13] -- Slightly Less Jank Edition 
  
 A script to add many features to gurochan
 
