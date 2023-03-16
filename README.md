@@ -1,7 +1,8 @@
 # ![logo](./res/bandaid.svg) GX PATCHER 
-##### VERSION [0.14] UNFINISHED BUILD
+##### VERSION [0.14] 
  
 A script to add many features to gurochan. This is a small hobby project on a burner account. But feel free to leave feedback or request features!
+
 
 ## Features
 #### Gallery mode
@@ -16,10 +17,17 @@ Inline image expansion from your location on the page (or the whole page)
 - Add sort by image in catalog mode
 - Many small UI tweaks
 ## Usage
-Simply copy the code from main.js and paste it into [options]>Custom Js
+Simply copy the code from main.js and paste it into [options]>User Js
 
  
 ## [CHANGELOG]
+#### V 0.14
+ - pointed updater to github page
+ - added 'hide posts without images' mode and keybind
+ - formatting and style changes
+ - added shortcut for settings
+ - added logo in menubar
+ - slowly deduplicating code and cleaning up
 #### V 0.13
  - fixed many bugs
  - added update checker
