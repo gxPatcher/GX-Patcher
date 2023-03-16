@@ -43,8 +43,18 @@ isScroll=0;
 
 // CSS
 $("<style type='text/css'>"+
-    "#gallery{ width:100vw; height:100vh; position:fixed; left:0; top:0; z-index:999; } #bigimg{ display:inline-block; background:#a8a8a826; height:100vh; width:400px; } #bigimg>img{ width:100%; height:100%; object-fit:contain; } #thumbs{ display:inline-block; background:#0b0b0b57; width:200px; height:100vh; float:right; overflow:scroll; } .galleryThumb{ display:inline-block; width:100%; height:200px; background:grey; margin-bottom:0px; } .galleryThumb>img{ width:100%; height:100%; object-fit:contain; } .activeThumb{ background: #444242; }  #galleryStats { position: absolute; right: 210px; bottom: 10px; text-align:right; font-size:15px; }"+
+    "#gallery{ width:100vw; height:100vh; position:fixed; left:0; top:0; z-index:999; }"+
+    "#bigimg{ display:inline-block; background:#a8a8a826; height:100vh; width:400px; }"+
+    "#bigimg>img{ width:100%; height:100%; object-fit:contain; }"+
+    "#thumbs{ display:inline-block; background:#0b0b0b57; width:200px; height:100vh; float:right; overflow:scroll; }"+
+    ".galleryThumb{ display:inline-block; width:100%; height:200px; background:grey; margin-bottom:0px; }"+
+    ".galleryThumb>img{ width:100%; height:100%; object-fit:contain; }"+
+    ".activeThumb{ background: #444242; }"+
+    "#galleryStats { position: absolute; right: 210px; bottom: 10px; text-align:right; font-size:15px; }"+
+    '.options_tab:nth-of-type(3) textarea {background-image: url(\"data: image/svg+xml,'+getLogo(120,"rgb(195, 210, 161)")+'"); background-repeat: no-repeat; background-position: 10px 10px; }'+
     "</style>").appendTo("head");
+
+//$($(".options_tab")[1]).find("textarea").css({"background-image": 'url(\"data: image/svg+xml,<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"120\\\" height=\\\"120\\\" fill=\\\"rgb(195, 210, 161)\\\" class=\\\"bi bi-bandaid\\\" viewBox=\\\"0 0 16 16\\\"> <path d=\\\"M14.121 1.879a3 3 0 0 0-4.242 0L8.733 3.026l4.261 4.26 1.127-1.165a3 3 0 0 0 0-4.242ZM12.293 8 8.027 3.734 3.738 8.031 8 12.293 12.293 8Zm-5.006 4.994L3.03 8.737 1.879 9.88a3 3 0 0 0 4.241 4.24l.006-.006 1.16-1.121ZM2.679 7.676l6.492-6.504a4 4 0 0 1 5.66 5.653l-1.477 1.529-5.006 5.006-1.523 1.472a4 4 0 0 1-5.653-5.66l.001-.002 1.505-1.492.001-.002Z\\\"/> <path d=\\\"M5.56 7.646a.5.5 0 1 1-.706.708.5.5 0 0 1 .707-.708Zm1.415-1.414a.5.5 0 1 1-.707.707.5.5 0 0 1 .707-.707ZM8.39 4.818a.5.5 0 1 1-.708.707.5.5 0 0 1 .707-.707Zm0 5.657a.5.5 0 1 1-.708.707.5.5 0 0 1 .707-.707ZM9.803 9.06a.5.5 0 1 1-.707.708.5.5 0 0 1 .707-.707Zm1.414-1.414a.5.5 0 1 1-.706.708.5.5 0 0 1 .707-.708ZM6.975 9.06a.5.5 0 1 1-.707.708.5.5 0 0 1 .707-.707ZM8.39 7.646a.5.5 0 1 1-.708.708.5.5 0 0 1 .707-.708Zm1.413-1.414a.5.5 0 1 1-.707.707.5.5 0 0 1 .707-.707Z\\\"/> </svg>\")', "background-repeat": 'no-repeat', "background-position": '10px 10px'})
 
 // HTML
 $("body").append('<div id="gallery">'+
@@ -56,6 +66,11 @@ $("body").append('<div id="gallery">'+
 $("#gallery").hide();
 $("#bigimg").width($(window).width()-201);
 
+function getLogo(size,color){
+    size=(typeof(size)==="undefined"?12:size);
+    color=(typeof(color)==="undefined"?"currentColor":color);
+    return '<svg xmlns="http://www.w3.org/2000/svg" fill="' + color + '" class="bi bi-bandaid" viewBox="0 0 16 16" height="' + size + '" width="' + size + '"> <path d="M14.121 1.879a3 3 0 0 0-4.242 0L8.733 3.026l4.261 4.26 1.127-1.165a3 3 0 0 0 0-4.242ZM12.293 8 8.027 3.734 3.738 8.031 8 12.293 12.293 8Zm-5.006 4.994L3.03 8.737 1.879 9.88a3 3 0 0 0 4.241 4.24l.006-.006 1.16-1.121ZM2.679 7.676l6.492-6.504a4 4 0 0 1 5.66 5.653l-1.477 1.529-5.006 5.006-1.523 1.472a4 4 0 0 1-5.653-5.66l.001-.002 1.505-1.492.001-.002Z"></path> <path d="M5.56 7.646a.5.5 0 1 1-.706.708.5.5 0 0 1 .707-.708Zm1.415-1.414a.5.5 0 1 1-.707.707.5.5 0 0 1 .707-.707ZM8.39 4.818a.5.5 0 1 1-.708.707.5.5 0 0 1 .707-.707Zm0 5.657a.5.5 0 1 1-.708.707.5.5 0 0 1 .707-.707ZM9.803 9.06a.5.5 0 1 1-.707.708.5.5 0 0 1 .707-.707Zm1.414-1.414a.5.5 0 1 1-.706.708.5.5 0 0 1 .707-.708ZM6.975 9.06a.5.5 0 1 1-.707.708.5.5 0 0 1 .707-.707ZM8.39 7.646a.5.5 0 1 1-.708.708.5.5 0 0 1 .707-.708Zm1.413-1.414a.5.5 0 1 1-.707.707.5.5 0 0 1 .707-.707Z"></path> </svg></i>';
+}
 // SETTINGS MENU
 Options.add_tab(2,"foo","GX Patcher V "+version,"<span id='patcher_settings_box'></span>");
 $($(".options_tab_icon")[2]).find("i").remove();
@@ -209,7 +224,7 @@ function checkForUpdate(e){
         updateBody=r;
         newVersion=parseFloat(r.split("\n")[0].match(/\[(.*?)\]/)[0].slice(1,-1));
         update=(newVersion>version?1:0);
-        $("#updateText").text((update?"New Update Available!":"No New Updates"));
+        $("#updateText").text((update?"New Update Version "+newVersion+" Available!":"No New Updates"));
          if(update){
              $("#patcher_checkUpdates").attr("value","Update");
              $("#patcher_checkUpdates").css({ "background-color": "rgb(132, 28, 31)", "color": "white" })
