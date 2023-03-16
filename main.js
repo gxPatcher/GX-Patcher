@@ -1,5 +1,5 @@
-// GX PATCHER VERSION [0.13] -- Slightly Less Jank Edition
-// Latest version always available at https://pastebin.com/whRbEqhw
+// VERSION [0.14] UNFINISHED BUILD -- Still pretty jank edition
+// Latest version available at 
 // [CHANGELOG]
 // V 0.13
 // fixed many bugs
@@ -14,6 +14,7 @@
 // - fix scrolling page to match gallery with expanded images
 // - account for auto update images
 // - add a 'hide posts without images' function
+
 
 settings={
     fromLocation:true,
