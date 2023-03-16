@@ -1,5 +1,5 @@
 # ![logo](./res/bandaid.svg) GX PATCHER 
-##### VERSION [0.13] -- Slightly Less Jank Edition 
+##### VERSION [0.14] UNFINISHED BUILD
  
 A script to add many features to gurochan. This is a small hobby project on a burner account. But feel free to leave feedback or request features!
 
