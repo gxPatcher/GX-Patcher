@@ -1,16 +1,6 @@
-// VERSION [0.14] UNFINISHED BUILD -- Still pretty jank edition
+// VERSION [0.14] -- Still pretty jank edition
 // Latest 'stable' version available at https://gxpatcher.github.io/GX-Patcher/main.js
-// version changelog
-// - pointed updater to github page
-// - added 'hide posts without images' mode and keybind
-// - formatting and style changes
-// - added 'hide posts without images' mode and keybind
-// - slowly deduplicating code and cleaning up
-// [TODO] 
-// - fix scrolling page to match gallery with expanded images
-// - account for auto-update images
-// - auto-check for updates function
-// - refactor code to be easier to follow
+// still really jank but tested and working
 
 
 // [TODO] move and clean this up. these are accessed from the gui now
@@ -22,6 +12,7 @@ settings={
         nextImage:"d",
         prevImage:"a",
         toggleGallery:"g",
+       	toggleSettings:"?",
         expandAll:"x",
         hideImageless:"f",
         scrollToTop:"t",
@@ -106,6 +97,8 @@ $("#patcher_settings_box").prepend('<form id="patcher_settings">'+
 
 $("#patcher_settings_box").append('<input type="submit" id="patcher_submit" value="Save Settings" onclick="saveSettings(event);">');
 $("#patcher_settings_box").append('</br><div><input type="submit" id="patcher_checkUpdates" onclick="checkForUpdate(event);" value="Check for Updates"><p style="display: inline-block;margin-left: 20px;font-weight: lighter;font-style: italic;font-size: 14px;" id="updateText">Not checked...</p></div>');
+//$("a[title=Options]").text('[ '+getLogo(20,"currentColor")+' Options]');
+$(".sub").prepend('<a class="boardlist-link" href="#">'+getLogo(20,"currentColor")+'</a>');
 
 // add keybinds
     $(Object.keys(settings.keybinds)).each(function(){
@@ -401,6 +394,10 @@ $(document).keydown(function(e){
             break;
         case settings.keybinds.expandAll:
             expandAll();
+            break;
+        case settings.keybinds.toggleSettings:
+            Options.select_tab(2, true);
+            $(options_handler).fadeToggle("slow");
             break;
         case settings.keybinds.scrollToTop:
             $("html, body").animate({ scrollTop: "0px" });
