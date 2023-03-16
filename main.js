@@ -1,21 +1,17 @@
 // VERSION [0.14] UNFINISHED BUILD -- Still pretty jank edition
-// Latest version available at 
-// [CHANGELOG]
-// V 0.13
-// fixed many bugs
-// added update checker
-// added settings menu
-// saved settings and position in variables
-// [TODO] This version:
-// V 0.12A
-//   Added sort by image count in gallery mode
+// Latest 'stable' version available at https://gxpatcher.github.io/GX-Patcher/main.js
+// version changelog
+// - pointed updater to github page
+// - added 'hide posts without images' mode and keybind
+// - small formatting changes
 // [TODO] 
-// - finish auto update/update checker
 // - fix scrolling page to match gallery with expanded images
-// - account for auto update images
-// - add a 'hide posts without images' function
+// - account for auto-update images
+// - auto-check for updates function
+// - refactor code to be easier to follow// - added 'hide posts without images' mode and keybind
 
 
+// [TODO] move and clean this up. these are accessed from the gui now
 settings={
     fromLocation:true,
     preloadImages:true,
@@ -25,6 +21,7 @@ settings={
         prevImage:"a",
         toggleGallery:"g",
         expandAll:"x",
+        hideImageless:"f",
         scrollToTop:"t",
         scrollToBottom:"y"
     }
@@ -33,8 +30,7 @@ settings={
 version=0.13;
 update=-1;
 thumbGen=0;
-scriptURL="http://pastebin.com/raw.php?i=whRbEqhw";
-img=[];
+scriptURL="https://gxpatcher.github.io/GX-Patcher/main.js";
 imgC=0;
 preload=[];
 galleryOpen=0;
@@ -60,14 +56,15 @@ $("body").append('<div id="gallery">'+
 $("#gallery").hide();
 $("#bigimg").width($(window).width()-201);
 
-
-
 // SETTINGS MENU
 Options.add_tab(2,"foo","GX Patcher V "+version,"<span id='patcher_settings_box'></span>");
 $($(".options_tab_icon")[2]).find("i").remove();
 $($(".options_tab_icon")[2]).prepend('<i><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bandaid" viewBox="0 0 16 16" height="26" width="26"> <path d="M14.121 1.879a3 3 0 0 0-4.242 0L8.733 3.026l4.261 4.26 1.127-1.165a3 3 0 0 0 0-4.242ZM12.293 8 8.027 3.734 3.738 8.031 8 12.293 12.293 8Zm-5.006 4.994L3.03 8.737 1.879 9.88a3 3 0 0 0 4.241 4.24l.006-.006 1.16-1.121ZM2.679 7.676l6.492-6.504a4 4 0 0 1 5.66 5.653l-1.477 1.529-5.006 5.006-1.523 1.472a4 4 0 0 1-5.653-5.66l.001-.002 1.505-1.492.001-.002Z"></path> <path d="M5.56 7.646a.5.5 0 1 1-.706.708.5.5 0 0 1 .707-.708Zm1.415-1.414a.5.5 0 1 1-.707.707.5.5 0 0 1 .707-.707ZM8.39 4.818a.5.5 0 1 1-.708.707.5.5 0 0 1 .707-.707Zm0 5.657a.5.5 0 1 1-.708.707.5.5 0 0 1 .707-.707ZM9.803 9.06a.5.5 0 1 1-.707.708.5.5 0 0 1 .707-.707Zm1.414-1.414a.5.5 0 1 1-.706.708.5.5 0 0 1 .707-.708ZM6.975 9.06a.5.5 0 1 1-.707.708.5.5 0 0 1 .707-.707ZM8.39 7.646a.5.5 0 1 1-.708.708.5.5 0 0 1 .707-.708Zm1.413-1.414a.5.5 0 1 1-.707.707.5.5 0 0 1 .707-.707Z"></path> </svg></i>');
+// [TODO] add these progmatically
 $("#patcher_settings_box").prepend('<form id="patcher_settings">'+
     '<hr><table id="patcher_table" style="margin: 0px;">'+
+    ' <input data-sub="0" type="checkbox" id="checkForUpdates" '+(settings.fromLocation?"checked":"")+'>'+
+    ' <label for="checkForUpdates"> Automatically check for updates</label></br>'+
     ' <input data-sub="0" type="checkbox" id="fromLocation" '+(settings.fromLocation?"checked":"")+'>'+
     ' <label for="fromLocation"> Expand from current position</label></br>'+
     ' <input data-sub="0" type="checkbox" id="preloadImages" '+(settings.preloadImages?"checked":"")+'>'+
@@ -99,22 +96,52 @@ $( window ).resize(function() {
     $("#bigimg").width($(window).width()-201);
 });
 
-// hacky image preloading
+// Image preloading
 $.fn.preload = function() {
     this.each(function(){
         $('<img/>')[0].src = this;
     });
 }
 
+// create a database of each post with images
+// $(".post-image").each(function(){
+    // img.push($(this));
+    // preload.push($(this).parent().attr("href"));
+    // image=$(this).context.attributes['src'].nodeValue;
+    // $("#thumbs").append("<div id='gThumb-"+i+"'class='galleryThumb'><img src='"+image+"' /></div>");
+    // i++;
+// });
+//img=[];
 i=0;
-$(".post-image").each(function(){
-    img.push($(this));
-    preload.push($(this).parent().attr("href"));
-    image=$(this).context.attributes['src'].nodeValue;
-    $("#thumbs").append("<div id='gThumb-"+i+"'class='galleryThumb'><img src='"+image+"' /></div>");
-    i++;
-});
+img=[];
+noImg=[];
+$(".post").each(function () {
+    pi = $(this).find(".post-image");
+    if($(this).hasClass("op"))
+        pi=$(".thread .post-image").first();
+    if (pi.length == 0) { // no images
+        noImg.push($(this));
+    } else { // images
+        img.push(pi);
+        preload.push(pi.parent().attr("href"));
+        image = pi.attr("src");
+        $("#thumbs").append("<div id='gThumb-" + i + "'class='galleryThumb'><img src='" + image + "' /></div>");
+        i++;
+    }
+})
 imgC=i-1;
+
+noImgT=0;
+function toggleNoImg(){
+    if(noImgT){
+        $(noImg).each(function () { $(this).show() });
+        noImgT=0;
+    }else{
+        $(noImg).each(function () { $(this).hide() });
+        noImgT=1;
+    }
+}
+
 
 thread="T"+$("[name=thread]").val();
 
@@ -167,30 +194,30 @@ var updateBody="";
 
 function doUpdate(e){
     if(typeof(e)!=="undefined") e.preventDefault();
-    $($(".options_tab")[1]).find("textarea").val(updateBody.contents);
+    $($(".options_tab")[1]).find("textarea").val(updateBody);
     Options.select_tab("user-js")
-    //    [TODO] finish this
+    $($(".options_tab")[1]).find("input[type=button]").val("Update GX Patcher");
+    $($(".options_tab")[1]).find("input[type=button]").css({ "background-color": "rgb(132, 28, 31)", "color": "white" })
+    $($(".options_tab")[1]).find("textarea").val(updateBody);
+    $($(".options_tab")[1]).find("textarea").css({"background-image": 'url(\"data: image/svg+xml,<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"120\\\" height=\\\"120\\\" fill=\\\"rgb(236, 167, 169)\\\" class=\\\"bi bi-bandaid\\\" viewBox=\\\"0 0 16 16\\\"> <path d=\\\"M14.121 1.879a3 3 0 0 0-4.242 0L8.733 3.026l4.261 4.26 1.127-1.165a3 3 0 0 0 0-4.242ZM12.293 8 8.027 3.734 3.738 8.031 8 12.293 12.293 8Zm-5.006 4.994L3.03 8.737 1.879 9.88a3 3 0 0 0 4.241 4.24l.006-.006 1.16-1.121ZM2.679 7.676l6.492-6.504a4 4 0 0 1 5.66 5.653l-1.477 1.529-5.006 5.006-1.523 1.472a4 4 0 0 1-5.653-5.66l.001-.002 1.505-1.492.001-.002Z\\\"/> <path d=\\\"M5.56 7.646a.5.5 0 1 1-.706.708.5.5 0 0 1 .707-.708Zm1.415-1.414a.5.5 0 1 1-.707.707.5.5 0 0 1 .707-.707ZM8.39 4.818a.5.5 0 1 1-.708.707.5.5 0 0 1 .707-.707Zm0 5.657a.5.5 0 1 1-.708.707.5.5 0 0 1 .707-.707ZM9.803 9.06a.5.5 0 1 1-.707.708.5.5 0 0 1 .707-.707Zm1.414-1.414a.5.5 0 1 1-.706.708.5.5 0 0 1 .707-.708ZM6.975 9.06a.5.5 0 1 1-.707.708.5.5 0 0 1 .707-.707ZM8.39 7.646a.5.5 0 1 1-.708.708.5.5 0 0 1 .707-.708Zm1.413-1.414a.5.5 0 1 1-.707.707.5.5 0 0 1 .707-.707Z\\\"/> </svg>\")', "background-repeat": 'no-repeat', "background-position": '10px 10px'})
 }
 
 function checkForUpdate(e){
     if(typeof(e)!=="undefined") e.preventDefault();
     $("#updateText").text("Checking for updates. . .");
-    $.get("https://api.allorigins.win/get?url="+scriptURL, function(r){
+    $.get(scriptURL, function(r){
         updateBody=r;
-        newVersion=parseFloat(r.contents.split("\n")[0].match(/\[(.*?)\]/)[0].slice(1,-1));
+        newVersion=parseFloat(r.split("\n")[0].match(/\[(.*?)\]/)[0].slice(1,-1));
         update=(newVersion>version?1:0);
         $("#updateText").text((update?"New Update Available!":"No New Updates"));
-        if(update){
-            $("#patcher_checkUpdates").attr("value","Update");
-            $("#patcher_checkUpdates").attr("onClick","doUpdate(event)");
-        }
+         if(update){
+             $("#patcher_checkUpdates").attr("value","Update");
+             $("#patcher_checkUpdates").css({ "background-color": "rgb(132, 28, 31)", "color": "white" })
+             $("#patcher_checkUpdates").attr("onClick","doUpdate(event)");
+         }
         console.log("done checking for updates")
-    });
+    }, "text");
 }
-
-
-
-
 
 function nextImg(){
     start=$(window).scrollTop();
@@ -310,13 +337,13 @@ $(document).keydown(function(e){
     switch(e.key.toLowerCase()){
         case settings.keybinds.nextImage:
         case "arrowright":
-            if(!galleryOpen) break;
+            //if(!galleryOpen) break;
             storage.data = {currentImg:(storage.data.currentImg==imgC?0:storage.data.currentImg+1)}; //TODO function for delimiting current image
             galleryGo(storage.data.currentImg)
             break;
         case settings.keybinds.prevImage:
         case "arrowleft":
-            if(!galleryOpen) break;
+            //if(!galleryOpen) break;
             storage.data = {currentImg:(storage.data.currentImg==imgC?0:storage.data.currentImg-1)};
             galleryGo(storage.data.currentImg)
             break;
@@ -326,6 +353,9 @@ $(document).keydown(function(e){
                 galleryGo(nextImg());
             }
             $("#gallery").toggle()
+            break;
+        case settings.keybinds.hideImageless:
+            toggleNoImg();
             break;
         case "escape":
             if(galleryOpen){
