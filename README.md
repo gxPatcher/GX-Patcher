@@ -26,9 +26,8 @@ Simply copy the code from main.js and paste it into [options]>Custom Js
  - Add sort by image in catalog mode
  - added settings menu
  - saved settings and position in variables
- ### [TODO] This version:
  V 0.12A
-   Added sort by image count in gallery mode
+ - Added sort by image count in gallery mode
  [TODO] 
  - finish auto update/update checker
  - fix scrolling page to match gallery with expanded images
